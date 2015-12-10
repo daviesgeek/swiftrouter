@@ -16,7 +16,10 @@ public class Router {
     routes.append(Route(method: "GET", url: url, handler: handler))
   }
 
-  public func get(url: String, handler: String) {
+  public func get<T>(url: String, ctrl: Controller.Type, method: (T -> Handler)) {
+    let instance = ctrl.init()
+    let handler = method(instance as! T)
+
     routes.append(Route(method: "GET", url: url, handler: handler))
   }
 
