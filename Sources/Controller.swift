@@ -1,3 +1,3 @@
-public protocol Controller {
-  init()
+public class Controller {
+  public required init() {}
 }
