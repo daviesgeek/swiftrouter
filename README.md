@@ -2,7 +2,7 @@
 
 This is largely based on https://github.com/takebayashi/swiftra. I started playing with swiftra, and didn't like some of the things about it, so I set out to create my own version of it. The name, API and just about everything about this code base is subject to change.
 
-More detailed docs and such will be on the way.
+More detailed docs and such will be on the way. See [the example folder](https://github.com/daviesgeek/swiftrouter/tree/master/example) for an example of a simple application
 
 ## Running the router
 
