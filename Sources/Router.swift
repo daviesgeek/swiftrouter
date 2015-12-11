@@ -2,6 +2,7 @@ import struct http4swift.HTTPRequest
 import struct http4swift.HTTPServer
 import struct http4swift.SocketAddress
 import struct http4swift.Socket
+import Foundation
 
 public typealias Handler = (HTTPRequest) -> (Response)
 public typealias HTTPRequest = http4swift.HTTPRequest
@@ -30,6 +31,7 @@ public class Router {
       print("Socket failed")
       return
     }
+
     guard let server = HTTPServer(socket: sock, addr: addr) else {
       print("Server failed")
       return
@@ -37,10 +39,16 @@ public class Router {
 
     server.serve { (request, writer) in
 
+      guard let url = NSURL(string: request.path) else {
+        return
+      }
+
+      let params = self.parseParameters(url.query)
+
       var response: Response?
 
       for route in self.routes {
-        if(route.method == request.method && route.url == request.path) {
+        if(route.method == request.method && route.url == url.path) {
           response = route.handler(request)
           break
         }
@@ -60,7 +68,21 @@ public class Router {
       writer.write(response!.body)
     }
 
+  }
 
+  func parseParameters(paramString: String?) -> [String: String] {
+    var params = [String : String]()
+    guard let paramString = paramString else {
+      return params
+    }
+    var components = paramString.componentsSeparatedByString("&")
+
+    for i in 0..<components.count {
+      var section = components[i].componentsSeparatedByString("=")
+      params[section[0]] = section[1]
+    }
+
+    return params
   }
 
 }
